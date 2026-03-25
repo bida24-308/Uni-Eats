@@ -106,3 +106,22 @@ input {
     border: none;
     margin: 10px;
 }
+.meal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 40px;
+}
+
+.meal-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.meal-item img {
+    width: 100%;
+    border-radius: 10px;
+}
