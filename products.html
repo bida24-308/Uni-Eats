@@ -3,6 +3,36 @@
 <head>
     <title>One-Time Order</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Quick inline fix in case your CSS hides names */
+        .meal-item {
+            display: inline-block;
+            width: 200px;
+            margin: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, border 0.2s;
+        }
+        .meal-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .meal-item.selected {
+            border: 3px solid #FF6347;
+            transform: scale(1.05);
+        }
+        .btn {
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,61 +52,61 @@
 <!-- HERO -->
 <section class="hero">
     <h1>Order Once</h1>
-    <p>Pick your favorites and checkout instantly, no subscription needed!</p>
+    <p>Pick your favorites and checkout instantly!</p>
 </section>
 
 <!-- MEALS GRID -->
-<section class="meal-grid">
+<section class="meal-grid" id="mealGrid">
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Burger & Chips', this)">
+    <div class="meal-item" data-name="Burger & Chips">
         <img src="burger and chips.jpg" alt="Burger and Chips">
         <h3>Burger & Chips</h3>
         <p>Crispy, juicy, and perfectly seasoned.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Hotdog', this)">
+    <div class="meal-item" data-name="Hotdog">
         <img src="hotdog.jpg" alt="Hotdog">
         <h3>Hotdog</h3>
         <p>A classic favorite, fresh and delicious.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Kota', this)">
+    <div class="meal-item" data-name="Kota">
         <img src="kota.jpg" alt="Kota">
         <h3>Kota</h3>
         <p>Local flavor packed into every bite.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Macaroni', this)">
+    <div class="meal-item" data-name="Macaroni">
         <img src="macaroni.jpg" alt="Macaroni">
         <h3>Macaroni</h3>
         <p>Cheesy, creamy, and cooked to perfection.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Rice Dish', this)">
+    <div class="meal-item" data-name="Rice Dish">
         <img src="rice.jpg" alt="Rice Dish">
         <h3>Rice Dish</h3>
         <p>Warm, comforting, and full of flavor.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Spaghetti', this)">
+    <div class="meal-item" data-name="Spaghetti">
         <img src="spaghetti.jpg" alt="Spaghetti">
         <h3>Spaghetti</h3>
         <p>Rich sauce and perfectly cooked pasta.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Sorghum Porridge with Beef', this)">
+    <div class="meal-item" data-name="Sorghum Porridge with Beef">
         <img src="Sorghum Porridge with Beef.jfif" alt="Sorghum Porridge with Beef">
         <h3>Sorghum Porridge with Beef</h3>
         <p>A hearty, traditional favorite.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Coca-Cola', this)">
+    <div class="meal-item" data-name="Coca-Cola">
         <img src="coke.jpg" alt="Coca-Cola">
         <h3>Coca-Cola</h3>
         <p>Refreshing and ice-cold.</p>
     </div>
 
-    <div class="meal-item" onclick="selectOneTimeMeal('Fanta', this)">
+    <div class="meal-item" data-name="Fanta">
         <img src="fanta.jpg" alt="Fanta">
         <h3>Fanta</h3>
         <p>Bright, fruity, and full of flavor.</p>
@@ -86,36 +116,37 @@
 
 <!-- CHECKOUT BUTTON -->
 <div style="text-align:center; margin:40px;">
-    <button class="btn" onclick="checkoutOneTime()">Checkout</button>
+    <button class="btn" id="checkoutBtn">Checkout</button>
 </div>
 
 <script>
-    // Array to hold selected meals
-    let oneTimeSelection = [];
+    const mealItems = document.querySelectorAll('.meal-item');
+    let selectedMeals = [];
 
-    function selectOneTimeMeal(mealName, element) {
-        const index = oneTimeSelection.indexOf(mealName);
-        if(index === -1){
-            oneTimeSelection.push(mealName);
-            element.style.border = "3px solid #FF6347"; // Highlight selection
+    mealItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const mealName = item.getAttribute('data-name');
+            if(item.classList.contains('selected')){
+                item.classList.remove('selected');
+                selectedMeals = selectedMeals.filter(m => m !== mealName);
+            } else {
+                item.classList.add('selected');
+                selectedMeals.push(mealName);
+            }
+            console.log("Selected meals:", selectedMeals);
+        });
+    });
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if(selectedMeals.length === 0){
+            alert("Please select at least one meal!");
         } else {
-            oneTimeSelection.splice(index, 1);
-            element.style.border = "none"; // Remove highlight
+            alert("You ordered: " + selectedMeals.join(", "));
+            // Replace below line with real checkout page redirect if needed
+            // window.location.href = "checkout.html";
         }
-        console.log("Selected meals:", oneTimeSelection);
-    }
+    });
+</script>
 
-    function checkoutOneTime() {
-        if(oneTimeSelection.length === 0){
-            alert("Pick at least one meal to checkout!");
-            return;
-        }
-        // For now, just alert the selection
-        alert("You ordered: " + oneTimeSelection.join(", "));
-        // You can replace this with redirection to a real checkout page
-        // window.location.href = "checkout.html";
-    }
-    
-<script src="main.js"></script>
 </body>
 </html>
