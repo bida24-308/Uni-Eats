@@ -4,10 +4,9 @@
     <title>One-Time Order</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Quick inline fix in case your CSS hides names */
         .meal-item {
             display: inline-block;
-            width: 200px;
+            width: 250px;
             margin: 15px;
             text-align: center;
             cursor: pointer;
@@ -16,12 +15,16 @@
         }
         .meal-item img {
             width: 100%;
-            height: 150px;
+            height: auto;
             object-fit: cover;
         }
         .meal-item.selected {
             border: 3px solid #FF6347;
             transform: scale(1.05);
+        }
+        .meal-price {
+            font-weight: bold;
+            margin-top: 5px;
         }
         .btn {
             background-color: #FF6347;
@@ -32,11 +35,15 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        #total {
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav>
     <h2>Uni-Eats</h2>
     <ul>
@@ -49,73 +56,80 @@
     </ul>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
     <h1>Order Once</h1>
-    <p>Pick your favorites and checkout instantly!</p>
+    <p>Select your meals and see the total price before checkout!</p>
 </section>
 
-<!-- MEALS GRID -->
 <section class="meal-grid" id="mealGrid">
 
-    <div class="meal-item" data-name="Burger & Chips">
+    <div class="meal-item" data-name="Burger & Chips" data-price="50">
         <img src="burger and chips.jpg" alt="Burger and Chips">
         <h3>Burger & Chips</h3>
         <p>Crispy, juicy, and perfectly seasoned.</p>
+        <div class="meal-price">BWP 50</div>
     </div>
 
-    <div class="meal-item" data-name="Hotdog">
+    <div class="meal-item" data-name="Hotdog" data-price="35">
         <img src="hotdog.jpg" alt="Hotdog">
         <h3>Hotdog</h3>
         <p>A classic favorite, fresh and delicious.</p>
+        <div class="meal-price">BWP 35</div>
     </div>
 
-    <div class="meal-item" data-name="Kota">
+    <div class="meal-item" data-name="Kota" data-price="40">
         <img src="kota.jpg" alt="Kota">
         <h3>Kota</h3>
         <p>Local flavor packed into every bite.</p>
+        <div class="meal-price">BWP 40</div>
     </div>
 
-    <div class="meal-item" data-name="Macaroni">
+    <div class="meal-item" data-name="Macaroni" data-price="45">
         <img src="macaroni.jpg" alt="Macaroni">
         <h3>Macaroni</h3>
         <p>Cheesy, creamy, and cooked to perfection.</p>
+        <div class="meal-price">BWP 45</div>
     </div>
 
-    <div class="meal-item" data-name="Rice Dish">
+    <div class="meal-item" data-name="Rice Dish" data-price="40">
         <img src="rice.jpg" alt="Rice Dish">
         <h3>Rice Dish</h3>
         <p>Warm, comforting, and full of flavor.</p>
+        <div class="meal-price">BWP 40</div>
     </div>
 
-    <div class="meal-item" data-name="Spaghetti">
+    <div class="meal-item" data-name="Spaghetti" data-price="45">
         <img src="spaghetti.jpg" alt="Spaghetti">
         <h3>Spaghetti</h3>
         <p>Rich sauce and perfectly cooked pasta.</p>
+        <div class="meal-price">BWP 45</div>
     </div>
 
-    <div class="meal-item" data-name="Sorghum Porridge with Beef">
+    <div class="meal-item" data-name="Sorghum Porridge with Beef" data-price="55">
         <img src="Sorghum Porridge with Beef.jfif" alt="Sorghum Porridge with Beef">
         <h3>Sorghum Porridge with Beef</h3>
         <p>A hearty, traditional favorite.</p>
+        <div class="meal-price">BWP 55</div>
     </div>
 
-    <div class="meal-item" data-name="Coca-Cola">
+    <div class="meal-item" data-name="Coca-Cola" data-price="15">
         <img src="coke.jpg" alt="Coca-Cola">
         <h3>Coca-Cola</h3>
         <p>Refreshing and ice-cold.</p>
+        <div class="meal-price">BWP 15</div>
     </div>
 
-    <div class="meal-item" data-name="Fanta">
+    <div class="meal-item" data-name="Fanta" data-price="15">
         <img src="fanta.jpg" alt="Fanta">
         <h3>Fanta</h3>
         <p>Bright, fruity, and full of flavor.</p>
+        <div class="meal-price">BWP 15</div>
     </div>
 
 </section>
 
-<!-- CHECKOUT BUTTON -->
-<div style="text-align:center; margin:40px;">
+<div style="text-align:center; margin:20px;">
+    <div id="total">Total: BWP 0</div>
     <button class="btn" id="checkoutBtn">Checkout</button>
 </div>
 
@@ -123,28 +137,38 @@
     const mealItems = document.querySelectorAll('.meal-item');
     let selectedMeals = [];
 
+    function updateTotal() {
+        let total = selectedMeals.reduce((sum, meal) => sum + parseFloat(meal.price), 0);
+        document.getElementById('total').textContent = "Total: BWP " + total;
+    }
+
     mealItems.forEach(item => {
+        const price = parseFloat(item.getAttribute('data-price'));
+        const name = item.getAttribute('data-name');
+
         item.addEventListener('click', () => {
-            const mealName = item.getAttribute('data-name');
-            if(item.classList.contains('selected')){
+            const existing = selectedMeals.find(m => m.name === name);
+            if(existing){
+                selectedMeals = selectedMeals.filter(m => m.name !== name);
                 item.classList.remove('selected');
-                selectedMeals = selectedMeals.filter(m => m !== mealName);
             } else {
+                selectedMeals.push({name, price});
                 item.classList.add('selected');
-                selectedMeals.push(mealName);
             }
-            console.log("Selected meals:", selectedMeals);
+            updateTotal();
         });
     });
 
     document.getElementById('checkoutBtn').addEventListener('click', () => {
         if(selectedMeals.length === 0){
             alert("Please select at least one meal!");
-        } else {
-            alert("You ordered: " + selectedMeals.join(", "));
-            // Replace below line with real checkout page redirect if needed
-            // window.location.href = "checkout.html";
+            return;
         }
+        let summary = selectedMeals.map(m => `${m.name} (BWP ${m.price})`).join("\n");
+        summary += "\n\nTotal: BWP " + selectedMeals.reduce((sum, m) => sum + m.price, 0);
+        alert("Your order:\n" + summary);
+        // Later replace with real checkout page
+        // window.location.href = "checkout.html";
     });
 </script>
 
