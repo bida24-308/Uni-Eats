@@ -108,13 +108,35 @@ nav a:hover {
     width: 300px;
 }
 
-/* INPUT */
+/* INPUT (GLOBAL - small default) */
 input {
     padding: 10px;
     border-radius: 6px;
     border: none;
     margin: 10px;
-    width: 50%;
+    width: 100%;
+}
+
+/* ACCOUNT / LOGIN BOX */
+.account-box {
+    max-width: 500px;
+    margin: 40px auto;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.account-box input {
+    flex: 1;
+}
+
+.account-box .btn {
+    white-space: nowrap;
 }
 
 /* MEAL GRID */
@@ -153,6 +175,12 @@ input {
     box-shadow: 0 0 10px #38bdf8;
 }
 
+/* PRICE */
+.meal-price {
+    color: #38bdf8;
+    font-weight: bold;
+}
+
 /* HERO BUTTON GROUP */
 .hero-buttons {
     margin-top: 20px;
@@ -185,9 +213,4 @@ input {
         opacity: 1; 
         transform: translateY(0); 
     }
-}
-
-.meal-price {
-    color: #38bdf8;
-    font-weight: bold;
 }
